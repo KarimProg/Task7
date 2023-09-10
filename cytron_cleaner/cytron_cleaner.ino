@@ -1,7 +1,7 @@
 /*
  * File: cytron_cleaner.ino
  * Author: Group 6
- * Description: This program passes motor speed through exponential smoothing filter
+ * Description: This program passes motor speed through an exponential smoothing filter
  *              to provide the motor with a soft start. (Input pin could be pulled down
  *              for more stable results)
  * Date: [8/9/2023]
