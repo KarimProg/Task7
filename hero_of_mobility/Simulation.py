@@ -3,33 +3,62 @@
 
 import numpy as np
 
-r = 0.2 # meters
 
-theta1 =   0    #Rad
-theta2 = 120    #Rad
-theta3 = 240    #Rad
+def calculate_wheel_velocities_local(Vx, Vy, w, wheel_config):
+    wheel_velocities = []
+    
+    for wheel_info in wheel_config:
+        L = wheel_info['distance']
+        theta = wheel_info['angle']
+        
+        V = Vx * np.cos(theta) + Vy * np.sin(theta)
+        omega = -Vx * np.sin(theta) + Vy * np.cos(theta) + L * w
+        
+        wheel_velocities.append(V + omega)
+    
+    return wheel_velocities
 
+def calculate_wheel_velocities_global(Vx, Vy, w, phi):
+    wheel_velocities = []
+
+    rot = np.array([ [-np.sin(phi * (np.pi/180)) , -np.sin(phi * (np.pi/180)) , -np.sin(phi * (np.pi/180)) ], 
+                     [ np.cos(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) ],
+                     [            1              ,             1              ,             1          ]])
+    
+    V = rot @ [[Vx], [Vy], [w]]
+    wheel_velocities.extend(v[0] for v in V)
+    
+    return wheel_velocities
+
+
+R = 0.2 # meters
+
+theta1 =   0    # Degree
+theta2 = 120    # Degree
+theta3 = 240    # Degree
+
+phi = np.radians(45)        # The angle between the robot’s x-axis and the global x-axis.
 
 Vx = 10      # meter / sec
 Vy = 10      # meter / sec
 w = 20       # Rad   / sec
 
+wheel_config = [
+    {'distance': R, 'angle': theta1 *  (np.pi / 180)},                     # Wheel 1 configuration: distance = 0.2, angle = 0 degrees
+    {'distance': R, 'angle': theta2 *  (np.pi / 180)},                     # Wheel 2 configuration: distance = 0.2, angle = 120 degrees (in radians)
+    {'distance': R, 'angle': theta3 *  (np.pi / 180)}                      # Wheel 3 configuration: distance = 0.2, angle = 240 degrees (in radians)
+]
 
-Vl = np.array([[ -np.sin(theta1 * (np.pi/180)) * Vx + np.cos(theta1 * (np.pi/180)) * Vy],
-               [ -np.sin(theta2 * (np.pi/180)) * Vx + np.cos(theta2 * (np.pi/180)) * Vy],
-               [ -np.sin(theta3 * (np.pi/180)) * Vx + np.cos(theta3 * (np.pi/180)) * Vy]])
+Vl = wheel_velocities = calculate_wheel_velocities_local(Vx, Vy, w, wheel_config)
 
-Wl = Vl / r
+for i, v in enumerate(Vl, start = 1):
+    v = "{:.2f}".format(v)
+    print(f"Velocity of Wheel {i} in Local frame: {v}")
 
-print(Wl)
+print("\n\n")
 
-rot = np.array([ [-np.sin(theta1 * (np.pi/180)) , -np.sin(theta2 * (np.pi/180)) , -np.sin(theta3 * (np.pi/180)) ], 
-                [ np.cos(theta1 * (np.pi/180)) ,  np.cos(theta2 * (np.pi/180)) ,  np.cos(theta2 * (np.pi/180)) ],
-                [               1              ,                1              ,                1          ]])
+Vg = calculate_wheel_velocities_global(Vx, Vy, w, phi)
 
-
-Vg = np.linalg.inv(rot) @ [[Vx], [Vy], [w]]
-
-Wg = Vg / r
-
-print(Wg)
+for i, v in enumerate(Vg, start = 1):
+    v = "{:.2f}".format(v)
+    print(f"Velocity of Wheel {i} in global frame: {v}")
