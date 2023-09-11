@@ -72,8 +72,3 @@ void adjustMotorSpeed(double pid_Output) {
 void pulseCounter() {
   pulseCount++;
 }
-
-void pulseCounter() {
-  pulseCount++;
-}
-
