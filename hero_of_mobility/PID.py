@@ -1,6 +1,7 @@
+# Header Files
 import time
 
-class PID:
+class PIDclass:
 
     # Class constructor
     def __init__(self, kp, ki, kd):
@@ -27,11 +28,10 @@ class PID:
         error = Setpoint - current
 
         # Calculate derivative
-        if self.prevError is not None:
+        if self.prevError is not None and period != 0:
             derivative = (error - self.prevError) / period
         else:
             derivative = 0
-
 
         # Calculate integral
         self.integ += error * period
@@ -41,4 +41,4 @@ class PID:
         self.prevError = error
 
         # Apply PID control system eqn
-        return self.kp * error + self.ki * self.integ + self.kd * derivative
+        return self.kp * error + self.kd * derivative + self.ki * self.integ 
