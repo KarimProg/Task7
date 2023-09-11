@@ -1,5 +1,6 @@
 #include <PID_v1.h>
 
+// Initialize flow meter and motor pins
 #define FLOW_SENSOR_PIN 2
 #define MOTOR_PIN 3
 
@@ -19,7 +20,7 @@ double input = 0;
 // Define output variable
 double output = 0;
 
-// Create PID controller object
+// Create PID controller object using PID_v1 library
 PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
 
 void setup() {
@@ -40,13 +41,13 @@ void loop() {
   // Print flow rate and motor speed to serial monitor
   Serial.print("Flow rate: ");
   Serial.print(flowRate);
-  Serial.print(" L/min\tMotor speed: ");
+  Serial.print(" Motor speed: ");
   Serial.println(motorSpeed);
 
   pulseCount = 0; // Reset pulse count for next measurement
   delay(1000);
   // Read flow rate from flow meter
-  input = readFlowRate();
+  input = flowRate;
 
   // Compute PID output
   myPID.Compute();
@@ -58,28 +59,20 @@ void loop() {
   delay(100);
 }
 
-// Read flow rate from flow meter and return the value
-double readFlowRate() {
-  // Count pulses for one second
-  unsigned long startTime = millis();
-  while (millis() - startTime < 1000) {
-    pulseCount += digitalRead(FLOW_SENSOR_PIN) == HIGH;
-    delayMicroseconds(1000); // Wait for 1ms to debounce
-  }
-
-  // Calculate flow rate in L/min
-  flowRate = pulseCount * 2.25;
-  return flowRate;
-}
 
 // Adjust motor speed based on the PID output
-void adjustMotorSpeed(double speed) {
+void adjustMotorSpeed(double pid_Output) {
   // Convert PID output to a motor speed value between 0 and 255
-  int motor_Speed = map(output, -255, 255, 0, 255);
+  int motor_Speed = map(pid_Output, -255, 255, 0, 255);
 
   // Set the motor speed using PWM
-  analogWrite(MOTOR_PIN, motorSpeed);
+  analogWrite(MOTOR_PIN, motor_Speed);
 }
+
+void pulseCounter() {
+  pulseCount++;
+}
+
 void pulseCounter() {
   pulseCount++;
 }
