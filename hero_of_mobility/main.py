@@ -24,7 +24,7 @@ PIDx = PIDclass(kp,ki,kd)
 PIDy = PIDclass(kp,ki,kd)
 PIDtheta = PIDclass(kp,ki,kd)
 
-# Start position
+# Start position (x, y, theta)
 position = [0, 0, 0]
 
 # End position
@@ -33,7 +33,7 @@ destination = [setpointX, setpointY, setpointTheta]
 # Time management variable
 prevTime = 0
 
-def get_velocity(Vx, Vy, w):
+def get_velocity(Vx, Vy, Vtheta):
     # Wheel angles
     theta1 = 0 
     theta2 = 120
@@ -46,7 +46,7 @@ def get_velocity(Vx, Vy, w):
             [               1             ,                1             ,                1             ]
         ]
     )
-    sols = np.array([Vx, Vy, 0.2 * w])
+    sols = np.array([Vx, Vy, 0.2 * Vtheta])
 
     V1, V2, V3 = np.linalg.solve(arr, sols)
     return V1, V2, V3
