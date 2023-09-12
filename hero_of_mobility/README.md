@@ -28,7 +28,7 @@ Assuming that the angle between each wheel is 120 degrees and first wheel lies o
 
 ![Factorize the Velocities](imgs/img_03.png)
 
-- After generalizing the matrix we use the coefficients of `sin` and `cos` to get the matrix.
+- From the Assumption, we build the matrix from the coefficients of `sin` and `cos`.
 
 - Solve the matrix equation using `Linear Algebra` to get the vector V which has the velocity of each wheel.
 
