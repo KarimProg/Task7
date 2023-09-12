@@ -1,4 +1,6 @@
-#include <PID_v1.h>
+#include <PIDController.h>
+#include <FlowMeter.h>
+#include <MotorDriver.h>
 
 // Initialize flow meter and motor pins
 #define FLOW_SENSOR_PIN 2
@@ -21,7 +23,7 @@ double input = 0;
 double output = 0;
 
 // Create PID controller object using PID_v1 library
-PID myPID(&input, &output, &setpoint, Kp, Ki, Kd, DIRECT);
+PIDController myPID(Kp, Ki, Kd, setpoint, &output);
 
 void setup() {
   // Initialize flow meter and motor
@@ -50,7 +52,7 @@ void loop() {
   input = flowRate;
 
   // Compute PID output
-  myPID.Compute();
+  myPID.update(input);
 
   // Adjust motor speed based on PID output
   adjustMotorSpeed(output);

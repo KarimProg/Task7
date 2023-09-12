@@ -1,7 +1,7 @@
 #include "PIDController.h"
 
-PIDController::PIDController(double kp, double ki, double kd, double setpoint)
-    : kp_(kp), ki_(ki), kd_(kd), setpoint_(setpoint), integral_(0), prevError_(0), output_(0) {}
+PIDController::PIDController(double kp, double ki, double kd, double setpoint, double *output)
+    : kp_(kp), ki_(ki), kd_(kd), setpoint_(setpoint), integral_(0), prevError_(0), output_(output) {}
 
 void PIDController::setGains(double kp, double ki, double kd) {
     kp_ = kp;
@@ -25,10 +25,11 @@ double PIDController::update(double measurement) {
     double derivative = error - prevError_;
     
     /// Calculate the control output
-    output_ = (kp_ * error) + (ki_ * integral_) + (kd_ * derivative);
+    *output_ = (kp_ * error) + (ki_ * integral_) + (kd_ * derivative);
 
     /// Store the current error for the next iteration
     prevError_ = error;
 
-    return output_;
+    /// Adjust the real output
+    return *output_;
 }

@@ -13,8 +13,9 @@ public:
      * @param ki Integral gain.
      * @param kd Derivative gain.
      * @param setpoint The desired setpoint (target flow rate in CFM).
+     * @param output Pointet to the output to be adjusted
      */
-    PIDController(double kp, double ki, double kd, double setpoint);
+    PIDController(double kp, double ki, double kd, double setpoint, double *output);
 
     /**
      * @brief Set PID gains.
@@ -38,7 +39,7 @@ private:
     double setpoint_;/// Target setpoint in CFM
     double integral_;/// Integral accumulator
     double prevError_;/// Previous error
-    double output_;/// Control output
+    double *output_;/// Control output itself
 };
 
 #endif
