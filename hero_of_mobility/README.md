@@ -24,6 +24,10 @@ V1              +       V2        +         V3      = R * w
 
 ![Factorize the Velocities](imgs/img_02.png)
 
+Assuming that the angle between each wheel is 120 degrees and first wheel lies on the `X axis`.
+
+![Factorize the Velocities](imgs/img_03.png)
+
 - After generalizing the matrix we use the coefficients of `sin` and `cos` to get the matrix.
 
 - Solve the matrix equation using `Linear Algebra` to get the vector V which has the velocity of each wheel.
@@ -34,4 +38,4 @@ Global Frame: This is a chosen coordinate frame with a known origin. Usually, th
 
 Local Frame: This is a frame within the global frame that the robot exists in. Everything the robot measures is in this frame. 
 
-To convert from local frame to global frame we used the rotation matrix, as multiplying these matrix to local vector produce the global vector and then use the same functionality to get the velocities of each wheel.
+To convert from local frame to global frame we used the rotation matrix, as multiplying these matrix to local vector produce the global vector and then use the same functionality to get the velocities of each wheel
