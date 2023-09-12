@@ -2,16 +2,17 @@
 import time
 import numpy as np
 from PID import PIDclass
+import matplotlib.pyplot as plt
 
 # PID variables
-kp = 40
-ki = 20
-kd = 4 # In a physical robot this could be too high, due to excess noise
+kp = 6
+ki = 5
+kd = 2 # In a physical robot this could be too high, due to excess noise
 
 # Required positions
-setpointX = 200
-setpointY = 100
-setpointTheta = 200
+setpointX = -20 # Do not exceed -100-->100 in x and y due to limits of graph plot
+setpointY = 50
+setpointTheta = 90
 
 # Wheel angles
 theta1 = 0 
@@ -19,7 +20,7 @@ theta2 = 120
 theta3 = 240
 
 # Global angle
-phi = 0
+phi = 45
 
 # Delay to increase readablity of readings in terminal
 delay = 0.1
@@ -29,7 +30,7 @@ PIDx = PIDclass(kp,ki,kd)
 PIDy = PIDclass(kp,ki,kd)
 PIDtheta = PIDclass(kp,ki,kd)
 
-# Start position
+# Start position (x, y, theta)
 position = [0, 0, 0]
 
 # End position
@@ -38,8 +39,33 @@ destination = [setpointX, setpointY, setpointTheta]
 # Time management variable
 prevTime = 0
 
+# Initialize the graph
+plt.figure()
+plt.xlim(-100, 100)  # Set the x-axis limits based on your requirements
+plt.ylim(-100, 100)  # Set the y-axis limits based on your requirements
+plt.gca().set_aspect('equal', adjustable='box')  # Ensure aspect ratio is equal for x and y axes
+
+# Create a scatter plot for the dot
+dot, = plt.plot([], [], 'ro')  # 'ro' means red color, round marker
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Position Plot')
+
+# Create an arrow to represent direction
+arrow = plt.arrow(0, 0, 0, 0, head_width=5, head_length=10, fc='blue', ec='blue')  # Adjust head_width and head_length as needed
+
+# Function to update the dot position
+def update_plot(x, y, dx, dy):
+    global arrow
+    dot.set_xdata(x)
+    dot.set_ydata(y)
+    arrow.remove()  # Remove the previous arrow
+    arrow = plt.arrow(x, y, dx, dy, head_width=5, head_length=10, fc='blue', ec='blue')  # Create a new arrow
+
 # Loop to update position using PID control
 while True:
+
+
     currTime = time.time()
     Vx = PIDx.update(position[0], destination[0])
     Vy = PIDy.update(position[1], destination[1])
@@ -63,6 +89,7 @@ while True:
     # Calculate V for each motor
     V1, V2, V3 = np.linalg.solve(arr, sols)
 
+
     # Output to motor
     print(f"V1: {np.round(V1,2)}")
     print(f"V2: {np.round(V2,2)}")
@@ -82,7 +109,7 @@ while True:
 
 
     # Calculate time for conversion from speed to position
-    period = currTime - prevTime -delay
+    period = currTime - prevTime - delay - 0.01
 
     # Update position
     position[0] = position[0] + (Vx * period)
@@ -94,6 +121,15 @@ while True:
 
     # Print current position
     print(position)
+
+    # Calculate direction (dx, dy) based on Vx and Vy
+    dx, dy = 0.2 * np.cos(np.radians(position[2])), 0.2 * np.sin(np.radians(position[2]))
+
+    # Update dot position
+    update_plot(position[0], position[1], dx, dy)
+    
+    # Refresh the plot
+    plt.pause(0.01)
 
     # Delay to increase readbility of terminal
     time.sleep(delay)
