@@ -1,0 +1,103 @@
+\hypertarget{classPIDController}{}\doxysection{PIDController Class Reference}
+\label{classPIDController}\index{PIDController@{PIDController}}
+
+
+PID Controller class for controlling the suction mechanism of an APC machine.  
+
+
+
+
+{\ttfamily \#include $<$PIDController.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classPIDController_a023e7655950d10475bdd17c6f6d61fc6}{PIDController}} (double kp, double ki, double kd, double setpoint)
+\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{classPIDController}{PIDController}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPIDController_a1d9c92c101ccdfd06e9429c896841faf}{set\+Gains}} (double kp, double ki, double kd)
+\begin{DoxyCompactList}\small\item\em Set PID gains. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classPIDController_a0f48f0eb9957996baabd63351fbe2b45}{update}} (double measurement)
+\begin{DoxyCompactList}\small\item\em Update the PID controller with the current measurement. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+PID Controller class for controlling the suction mechanism of an APC machine. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classPIDController_a023e7655950d10475bdd17c6f6d61fc6}\label{classPIDController_a023e7655950d10475bdd17c6f6d61fc6}} 
+\index{PIDController@{PIDController}!PIDController@{PIDController}}
+\index{PIDController@{PIDController}!PIDController@{PIDController}}
+\doxysubsubsection{\texorpdfstring{PIDController()}{PIDController()}}
+{\footnotesize\ttfamily PIDController\+::\+PIDController (\begin{DoxyParamCaption}\item[{double}]{kp,  }\item[{double}]{ki,  }\item[{double}]{kd,  }\item[{double}]{setpoint }\end{DoxyParamCaption})}
+
+
+
+Constructor for \mbox{\hyperlink{classPIDController}{PIDController}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kp} & Proportional gain. \\
+\hline
+{\em ki} & Integral gain. \\
+\hline
+{\em kd} & Derivative gain. \\
+\hline
+{\em setpoint} & The desired setpoint (target flow rate in CFM). \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classPIDController_a1d9c92c101ccdfd06e9429c896841faf}\label{classPIDController_a1d9c92c101ccdfd06e9429c896841faf}} 
+\index{PIDController@{PIDController}!setGains@{setGains}}
+\index{setGains@{setGains}!PIDController@{PIDController}}
+\doxysubsubsection{\texorpdfstring{setGains()}{setGains()}}
+{\footnotesize\ttfamily void PIDController\+::set\+Gains (\begin{DoxyParamCaption}\item[{double}]{kp,  }\item[{double}]{ki,  }\item[{double}]{kd }\end{DoxyParamCaption})}
+
+
+
+Set PID gains. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kp} & Proportional gain. \\
+\hline
+{\em ki} & Integral gain. \\
+\hline
+{\em kd} & Derivative gain. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classPIDController_a0f48f0eb9957996baabd63351fbe2b45}\label{classPIDController_a0f48f0eb9957996baabd63351fbe2b45}} 
+\index{PIDController@{PIDController}!update@{update}}
+\index{update@{update}!PIDController@{PIDController}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily double PIDController\+::update (\begin{DoxyParamCaption}\item[{double}]{measurement }\end{DoxyParamCaption})}
+
+
+
+Update the PID controller with the current measurement. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em measurement} & The current flow rate measurement in CFM. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The control output. 
+\end{DoxyReturn}
+Calculate error
+
+Calculate the integral term with anti-\/windup protection
+
+Add your own anti-\/windup threshold here
+
+Calculate the derivative term
+
+Calculate the control output
+
+Store the current error for the next iteration
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+PIDController.\+h\item 
+PIDController.\+cpp\end{DoxyCompactItemize}

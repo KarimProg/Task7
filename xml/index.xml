@@ -1,3 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.1" xml:lang="en-US">
+  <compound refid="classPIDController" kind="class"><name>PIDController</name>
+    <member refid="classPIDController_1ac855ceb88c5baea0b389a57a78292c76" kind="variable"><name>kp_</name></member>
+    <member refid="classPIDController_1a79803fca397bf1d4afc6298ff2c56b50" kind="variable"><name>ki_</name></member>
+    <member refid="classPIDController_1aa2e284369bcf62a446185cee88c4413a" kind="variable"><name>kd_</name></member>
+    <member refid="classPIDController_1a8bc3ec18d33da3afc15903e24f81851b" kind="variable"><name>setpoint_</name></member>
+    <member refid="classPIDController_1a07f426a715aec6402a01c4f979af028d" kind="variable"><name>integral_</name></member>
+    <member refid="classPIDController_1aa45c4bbcdf33fc54a2a1c3c9b8241be6" kind="variable"><name>prevError_</name></member>
+    <member refid="classPIDController_1a97e5b7df235c9f376d472abc56afa9c0" kind="variable"><name>output_</name></member>
+    <member refid="classPIDController_1a023e7655950d10475bdd17c6f6d61fc6" kind="function"><name>PIDController</name></member>
+    <member refid="classPIDController_1a1d9c92c101ccdfd06e9429c896841faf" kind="function"><name>setGains</name></member>
+    <member refid="classPIDController_1a0f48f0eb9957996baabd63351fbe2b45" kind="function"><name>update</name></member>
+  </compound>
+  <compound refid="PIDController_8cpp" kind="file"><name>PIDController.cpp</name>
+  </compound>
+  <compound refid="PIDController_8h" kind="file"><name>PIDController.h</name>
+  </compound>
 </doxygenindex>

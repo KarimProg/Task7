@@ -1,11 +1,10 @@
-/**
- * @file PIDController.h
- * @brief PID Controller class for controlling the suction mechanism of an APC machine.
- */
-
 #ifndef PIDCONTROLLER_H
 #define PIDCONTROLLER_H
 
+/**
+ * @class PIDController
+ * @brief PID Controller class for controlling the suction mechanism of an APC machine.
+ */
 class PIDController {
 public:
     /**
@@ -33,13 +32,13 @@ public:
     double update(double measurement);
 
 private:
-    double kp_;          /// Proportional gain
-    double ki_;          /// Integral gain
-    double kd_;          /// Derivative gain
-    double setpoint_;    /// Target setpoint in CFM
-    double integral_;    /// Integral accumulator
-    double prevError_;   /// Previous error
-    double output_;      /// Control output
+    double kp_;/// Proportional gain
+    double ki_;/// Integral gain
+    double kd_;/// Derivative gain
+    double setpoint_;/// Target setpoint in CFM
+    double integral_;/// Integral accumulator
+    double prevError_;/// Previous error
+    double output_;/// Control output
 };
 
-#endif  /// PIDCONTROLLER_H
+#endif
