@@ -10,9 +10,9 @@ ki = 5
 kd = 2 # In a physical robot this could be too high, due to excess noise
 
 # Required positions
-setpointX = -20 # Do not exceed -100-->100 in x and y due to limits of graph plot
-setpointY = 50
-setpointTheta = 90
+setpointX = 200
+setpointY = 100
+setpointTheta = 200
 
 # Wheel angles
 theta1 = 0 
@@ -38,6 +38,25 @@ destination = [setpointX, setpointY, setpointTheta]
 
 # Time management variable
 prevTime = 0
+
+def get_velocity(Vx, Vy, Vtheta):
+    # Wheel angles
+    theta1 = 0 
+    theta2 = 120
+    theta3 = 240
+
+    arr = np.array(
+        [
+            [-np.sin(theta1 * np.pi / 180), -np.sin(theta2 * np.pi / 180), -np.sin(theta3 * np.pi / 180)],
+            [ np.cos(theta1 * np.pi / 180),  np.cos(theta2 * np.pi / 180),  np.cos(theta3 * np.pi / 180)],
+            [               1             ,                1             ,                1             ]
+        ]
+    )
+    sols = np.array([Vx, Vy, 0.2 * Vtheta])
+
+    V1, V2, V3 = np.linalg.solve(arr, sols)
+    return V1, V2, V3
+
 
 # Initialize the graph
 plt.figure()
@@ -89,18 +108,19 @@ while True:
     # Calculate V for each motor
     V1, V2, V3 = np.linalg.solve(arr, sols)
 
-
     # Output to motor
     print(f"V1: {np.round(V1,2)}")
     print(f"V2: {np.round(V2,2)}")
     print(f"V3: {np.round(V3,2)}")
 
     Rot  = np.array([ [np.cos(phi * (np.pi/180)) , -np.sin(phi * (np.pi/180)), 0 ], 
-                    [np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
-                    [           0              ,             0              , 1 ]])
+                    [  np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
+                    [             0              ,             0              , 1 ]])
 
     # Calculate velocities in global frame
-    VG1, VG2, VG3 = Rot  @  [V1, V2, V3]
+    VGx, VGy, VGtheta = Rot  @  [Vx, Vy, Vtheta]
+
+    VG1, VG2, VG3 = get_velocity(VGx, VGy, VGtheta)
 
     print("Global Frame : ")
     print(f"VG1: {np.round(VG1,2)}")
