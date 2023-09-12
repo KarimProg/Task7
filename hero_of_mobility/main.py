@@ -72,6 +72,7 @@ while True:
                     [np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
                     [           0              ,             0              , 1 ]])
 
+    # Calculate velocities in global frame
     VG1, VG2, VG3 = Rot  @  [V1, V2, V3]
 
     print("Global Frame : ")
