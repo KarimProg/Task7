@@ -13,13 +13,8 @@ setpointX = 200
 setpointY = 100
 setpointTheta = 200
 
-# Wheel angles
-theta1 = 0 
-theta2 = 120
-theta3 = 240
-
 # Global angle
-phi = 0
+phi = 45
 
 # Delay to increase readablity of readings in terminal
 delay = 0.1
@@ -38,6 +33,25 @@ destination = [setpointX, setpointY, setpointTheta]
 # Time management variable
 prevTime = 0
 
+def get_velocity(Vx, Vy, w):
+    # Wheel angles
+    theta1 = 0 
+    theta2 = 120
+    theta3 = 240
+
+    arr = np.array(
+        [
+            [-np.sin(theta1 * np.pi / 180), -np.sin(theta2 * np.pi / 180), -np.sin(theta3 * np.pi / 180)],
+            [ np.cos(theta1 * np.pi / 180),  np.cos(theta2 * np.pi / 180),  np.cos(theta3 * np.pi / 180)],
+            [               1             ,                1             ,                1             ]
+        ]
+    )
+    sols = np.array([Vx, Vy, 0.2 * w])
+
+    V1, V2, V3 = np.linalg.solve(arr, sols)
+    return V1, V2, V3
+
+
 # Loop to update position using PID control
 while True:
     currTime = time.time()
@@ -49,19 +63,8 @@ while True:
     print(f"Velocity X: {Vx}")
     print(f"Velocity Y: {Vy}")
     print(f"Omega: {Vtheta}")
-
-    arr = np.array(
-    [
-        [-np.sin(theta1 * np.pi / 180), -np.sin(theta2 * np.pi / 180), -np.sin(theta3 * np.pi / 180)],
-        [ np.cos(theta1 * np.pi / 180),  np.cos(theta2 * np.pi / 180),  np.cos(theta3 * np.pi / 180)],
-        [               1             ,                1             ,                1             ]
-    ]
-)
-
-    sols = np.array([Vx, Vy, 0.2 * Vtheta])
-
-    # Calculate V for each motor
-    V1, V2, V3 = np.linalg.solve(arr, sols)
+    
+    V1, V2, V3 = get_velocity(Vx, Vy, Vtheta)
 
     # Output to motor
     print(f"V1: {np.round(V1,2)}")
@@ -69,11 +72,13 @@ while True:
     print(f"V3: {np.round(V3,2)}")
 
     Rot  = np.array([ [np.cos(phi * (np.pi/180)) , -np.sin(phi * (np.pi/180)), 0 ], 
-                    [np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
-                    [           0              ,             0              , 1 ]])
+                    [  np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
+                    [             0              ,             0              , 1 ]])
 
     # Calculate velocities in global frame
-    VG1, VG2, VG3 = Rot  @  [V1, V2, V3]
+    VGx, VGy, VGtheta = Rot  @  [Vx, Vy, Vtheta]
+
+    VG1, VG2, VG3 = get_velocity(VGx, VGy, VGtheta)
 
     print("Global Frame : ")
     print(f"VG1: {np.round(VG1,2)}")
