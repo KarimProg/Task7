@@ -1,5 +1,6 @@
 # Header Files
 import time
+import numpy as np
 from PID import PIDclass
 
 # PID variables
@@ -8,9 +9,17 @@ ki = 20
 kd = 4 # In a physical robot this could be too high, due to excess noise
 
 # Required positions
-setpointX = 20
-setpointY = 10
-setpointTheta = 50
+setpointX = 200
+setpointY = 100
+setpointTheta = 200
+
+# Wheel angles
+theta1 = 0 
+theta2 = 120
+theta3 = 240
+
+# Global angle
+phi = 0
 
 # Delay to increase readablity of readings in terminal
 delay = 0.1
@@ -40,6 +49,36 @@ while True:
     print(f"Velocity X: {Vx}")
     print(f"Velocity Y: {Vy}")
     print(f"Omega: {Vtheta}")
+
+    arr = np.array(
+    [
+        [-np.sin(theta1 * np.pi / 180), -np.sin(theta2 * np.pi / 180), -np.sin(theta3 * np.pi / 180)],
+        [ np.cos(theta1 * np.pi / 180),  np.cos(theta2 * np.pi / 180),  np.cos(theta3 * np.pi / 180)],
+        [               1             ,                1             ,                1             ]
+    ]
+)
+
+    sols = np.array([Vx, Vy, 0.2 * Vtheta])
+
+    # Calculate V for each motor
+    V1, V2, V3 = np.linalg.solve(arr, sols)
+
+    # Output to motor
+    print(f"V1: {np.round(V1,2)}")
+    print(f"V2: {np.round(V2,2)}")
+    print(f"V3: {np.round(V3,2)}")
+
+    Rot  = np.array([ [np.cos(phi * (np.pi/180)) , -np.sin(phi * (np.pi/180)), 0 ], 
+                    [np.sin(phi * (np.pi/180)) ,  np.cos(phi * (np.pi/180)) , 0 ],
+                    [           0              ,             0              , 1 ]])
+
+    VG1, VG2, VG3 = Rot  @  [V1, V2, V3]
+
+    print("Global Frame : ")
+    print(f"VG1: {np.round(VG1,2)}")
+    print(f"VG2: {np.round(VG2,2)}")
+    print(f"VG3: {np.round(VG3,2)}")
+
 
     # Calculate time for conversion from speed to position
     period = currTime - prevTime -delay
